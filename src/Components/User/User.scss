@@ -1,0 +1,18 @@
+.User {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+
+    img {
+        width: 75%;
+        border-radius: 50%;
+        border: 15px solid #2A4B7C;
+        margin: auto;
+    }
+
+    h1 {
+        font-weight: 700;
+    }
+}
