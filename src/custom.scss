@@ -1,5 +1,7 @@
 // Override default variables before the import
 $primary: #2A4B7C;
+$btn-border-radius: 0;
+$border-radius-lg: 0;
 
 // Import Bootstrap and its default variables
 @import '~bootstrap/scss/bootstrap.scss';
