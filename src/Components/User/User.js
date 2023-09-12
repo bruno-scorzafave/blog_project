@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
+import { brands } from '@fortawesome/fontawesome-svg-core/import.macro'
 
 import './User.scss';
 
@@ -15,10 +15,10 @@ function User() {
                 Justo stet no accusam stet invidunt sanctus magna clita vero eirmod, sit sit labore dolores lorem. Lorem at sit dolor dolores sed diam justo
                 </p>
                 <div class="d-flex justify-content-center mb-5">
-                    <a class="btn btn-outline-primary me-2" target="_blank" rel="noreferrer" href="https://www.linkedin.com/in/bruno-scorzafave/"><FontAwesomeIcon icon={icon({name: 'linkedin', style: 'brands'})} /></a>
-                    <a class="btn btn-outline-primary me-2" target="_blank" rel="noreferrer" href="https://www.linkedin.com/in/bruno-scorzafave/"><FontAwesomeIcon icon={icon({name: 'twitter', style: 'brands'})} /></a>
-                    <a class="btn btn-outline-primary me-2" target="_blank" rel="noreferrer" href="https://www.linkedin.com/in/bruno-scorzafave/"><FontAwesomeIcon icon={icon({name: 'facebook', style: 'brands'})} /></a>
-                    <a class="btn btn-outline-primary me-2" target="_blank" rel="noreferrer" href="https://www.linkedin.com/in/bruno-scorzafave/"><FontAwesomeIcon icon={icon({name: 'instagram', style: 'brands'})} /></a>
+                    <a class="btn btn-outline-primary me-2" target="_blank" rel="noreferrer" href="https://www.linkedin.com/in/bruno-scorzafave/"><FontAwesomeIcon icon={brands('linkedin')} /></a>
+                    <a class="btn btn-outline-primary me-2" target="_blank" rel="noreferrer" href="https://www.linkedin.com/in/bruno-scorzafave/"><FontAwesomeIcon icon={brands('twitter')} /></a>
+                    <a class="btn btn-outline-primary me-2" target="_blank" rel="noreferrer" href="https://www.linkedin.com/in/bruno-scorzafave/"><FontAwesomeIcon icon={brands('facebook')} /></a>
+                    <a class="btn btn-outline-primary me-2" target="_blank" rel="noreferrer" href="https://www.linkedin.com/in/bruno-scorzafave/"><FontAwesomeIcon icon={brands('instagram')} /></a>
                 </div>
                 <a href="https://www.linkedin.com/in/bruno-scorzafave/" target="_blank" rel="noreferrer" class="btn btn-lg btn-block btn-primary mt-auto">Hire Me</a>
             </div>
