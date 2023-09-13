@@ -1,4 +1,4 @@
-import User from './Components/User/User';
+import Profile from './Components/Profile/Profile';
 import BlogContent from './Components/BlogContent/BlogContent';
 
 import './App.scss';
@@ -6,7 +6,7 @@ import './App.scss';
 function App() {
   return (
     <div className="App">
-      <User />
+      <Profile />
       <BlogContent />
     </div>
   );
