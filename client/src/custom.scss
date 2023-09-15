@@ -11,6 +11,9 @@ $small-font-size: 80%;
 $link-decoration: none;
 $headings-color: $secondary;
 $navbar-padding-x: 1rem;
+$carousel-caption-width: 100%;
+$carousel-caption-spacer: 0;
+$carousel-caption-padding-y: 0;
 
 small,
 .small {
@@ -23,9 +26,8 @@ small,
 
 .carousel-caption {
   top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
 }
 
 // Import Bootstrap and its default variables
