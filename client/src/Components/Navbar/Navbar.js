@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
+import { Link, useLocation } from "wouter";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro'
 
 import './Navbar.scss';
 
-function Navbar() {
-    const [navbarShown, setNavbarShown] = useState(false);
-    const [dropdownShown, setDropdownShown] = useState(false);
+function Navbar({activeBar}) {
+    const [navbarShown, setNavbarShown] = useState(false)
+    const [dropdownShown, setDropdownShown] = useState(false)
+
 
     return (
         <div className="Navbar container p-0" onMouseLeave={() => setNavbarShown(false)} >
             <nav className="navbar navbar-expand-lg bg-secondary navbar-dark">
-                <a href="" className="navbar-brand d-block d-lg-none">Navigation</a>
+                <span className="navbar-brand d-block d-lg-none">Navigation</span>
                 <button
                     type="button"
                     className="navbar-toggler"
@@ -21,16 +23,16 @@ function Navbar() {
                 </button>
                 { navbarShown && <div className="navbar-collapse justify-content-between">
                     <div className="navbar-nav m-auto">
-                        <a href="index.html" className="nav-item nav-link active">Home</a>
-                        <a href="about.html" className="nav-item nav-link">About</a>
+                        <Link href='/' className={`nav-item nav-link text-start ${activeBar === 0 ? 'active' : ''}`}>Home</Link>
+                        <Link href='/about' className={`nav-item nav-link text-start ${activeBar === 1 ? 'active' : ''}`}>About</Link>
                         <div className="nav-item dropdown" onMouseLeave={() => setDropdownShown(false)}>
-                            <a href="#" className="nav-link dropdown-toggle" onMouseEnter={() => setDropdownShown(true)} >Pages</a>
+                            <button className="nav-link dropdown-toggle" onMouseEnter={() => setDropdownShown(true)} >Pages</button>
                             {<div className={`dropdown-menu ${dropdownShown ? "show" : ""}`}>
-                                <a href="blog.html" className="dropdown-item">Blog Grid</a>
-                                <a href="single.html" className="dropdown-item">Blog Detail</a>
+                                <Link href='/' className="dropdown-item text-start">Blog Grid</Link>
+                                <Link href='/' className="dropdown-item text-start">Blog Detail</Link>
                             </div>}
                         </div>
-                        <a href="contact.html" className="nav-item nav-link">Contact</a>
+                        <Link href='/' className={`nav-item nav-link text-start`}>Contact</Link>
                     </div>
                 </div>}
             </nav>
