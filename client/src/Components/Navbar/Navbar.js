@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from "wouter";
+import { Link } from "wouter";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro'
 
@@ -28,11 +28,11 @@ function Navbar({activeBar}) {
                         <div className="nav-item dropdown" onMouseLeave={() => setDropdownShown(false)}>
                             <button className="nav-link dropdown-toggle" onMouseEnter={() => setDropdownShown(true)} >Pages</button>
                             {<div className={`dropdown-menu ${dropdownShown ? "show" : ""}`}>
-                                <Link href='/' className="dropdown-item text-start">Blog Grid</Link>
+                                <Link href='/blog' className="dropdown-item text-start">Blog Grid</Link>
                                 <Link href='/' className="dropdown-item text-start">Blog Detail</Link>
                             </div>}
                         </div>
-                        <Link href='/' className={`nav-item nav-link text-start`}>Contact</Link>
+                        <Link href='/contact' className={`nav-item nav-link text-start ${activeBar === 2 ? 'active' : ''}`}>Contact</Link>
                     </div>
                 </div>}
             </nav>
