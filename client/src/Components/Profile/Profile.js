@@ -8,7 +8,7 @@ function Profile() {
     return (
         <div className="Profile">
             <div className="Profile-text d-flex flex-column h-100 justify-content-center text-center">
-                <img className="mx-auto d-block w-75 bg-primary img-fluid rounded-circle mb-4 p-3" src="img/profile.jpeg" alt="" />
+                <img className="mx-auto d-block w-75 bg-primary img-fluid rounded-circle mb-4 p-3" src={process.env.PUBLIC_URL +"/img/profile.jpeg"} alt="" />
                 <h1 className="font-weight-bold">Bruno Scorzafave</h1>
                 <p className="mb-4">
                 Justo stet no accusam stet invidunt sanctus magna clita vero eirmod, sit sit labore dolores lorem. Lorem at sit dolor dolores sed diam justo

@@ -29,12 +29,6 @@ function BlogGrid() {
     const currentPosts = blogPosts().slice(indexOfFirstPost, indexOfLastPost)
     const lastPage = Math.ceil(blogPosts().length / postsPerPage)
 
-    console.log('currentPage', currentPage)
-    console.log('indexOfLastPost', indexOfLastPost)
-    console.log('indexOfFirstPost', indexOfFirstPost)
-    console.log('currentPosts', currentPosts)
-    console.log('lastPage', lastPage)
-
     for (let i = 1; i <= lastPage; i++) {
         pageNumbers.push(i);
     }
@@ -43,11 +37,11 @@ function BlogGrid() {
         <>
         <PageHeader title={"My Blog"}/>
         {currentPosts}
-        <div className="row px-3 pb-5">
+        <div className="row px-3 pb-5 bg-white">
             <nav aria-label="Page navigation">
                 <ul className="pagination m-0 mx-3">
-                    <li id='prev' className={`page-item ${currentPage === 1 ? 'disabled' : ''}`} onClick={() => {setCurrentPage(currentPage - 1)}}>
-                        <button className="page-link" aria-label="Previous">
+                    <li id='prev' className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                        <button className="page-link" aria-label="Previous" disabled={currentPage === 1} onClick={() => {setCurrentPage(currentPage - 1)}}>
                             <span aria-hidden="true">«</span>
                             <span className="sr-only">Previous</span>
                         </button>
@@ -55,8 +49,8 @@ function BlogGrid() {
                     {pageNumbers.map((number) => (
                         <li id={number} className={`page-item ${currentPage === number ? 'active' : ''}`}><button className="page-link">{number}</button></li>
                     ))}
-                    <li id='next' className={"page-item"} onClick={() => {setCurrentPage(currentPage + 1)}}>
-                        <button className={"page-link"} disabled={currentPage === lastPage} aria-label="Next">
+                    <li id='next' className={`page-item ${currentPage === lastPage ? 'disabled' : ''}`}>
+                        <button className={"page-link"} disabled={currentPage === lastPage} aria-label="Next" onClick={() => {setCurrentPage(currentPage + 1)}}>
                             <span aria-hidden="true">»</span>
                             <span className="sr-only">Next</span>
                         </button>

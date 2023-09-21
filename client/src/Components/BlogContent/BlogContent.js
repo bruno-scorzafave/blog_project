@@ -1,4 +1,4 @@
-import { Route, Switch } from "wouter";
+import { Route, Switch, useRoute } from "wouter";
 
 import BlogPost from '../BlogPost/BlogPost';
 import Newsletter from '../Newsletter/Newsletter';
@@ -8,19 +8,22 @@ import BlogCarousel from '../BlogCarousel/BlogCarousel';
 import AboutMe from '../AboutMe/AboutMe';
 import Contact from "../Contact/Contact";
 import BlogGrid from "../BlogGrid/BlogGrid";
+import PostDetail from "../PostDetail/PostDetail";
 
 import './BlogContent.scss';
 
 function BlogContent() {
+  const [, params] = useRoute("/post/:title");
+
   return (
     <Switch>
       <Route path='/'>
         <div className="BlogContent">
           <Navbar activeBar={0} />
           <BlogCarousel />
-          <BlogPost />
+          <BlogPost post={{title: "1"}} />
           <Newsletter />
-          <BlogPost />
+          <BlogPost post={{title: "2"}}/>
           <Copyright />
         </div>
       </Route>
@@ -45,6 +48,14 @@ function BlogContent() {
           <Copyright />
         </div>
       </Route>
+      <Route path='/post/:title'>
+        <div className="BlogContent">
+          <Navbar />
+          <PostDetail post={params} />
+          <Copyright />
+        </div>
+      </Route>
+      {/* TODO: 404 page */}
       <Route>
         <div className="BlogContent">
           <Navbar activeBar={-1} />

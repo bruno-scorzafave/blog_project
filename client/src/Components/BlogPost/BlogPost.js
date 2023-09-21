@@ -1,9 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro'
+import { Link } from "wouter"
 
 import './BlogPost.scss';
 
-function BlogPost() {
+function BlogPost({post}) {
   return (
     <div className='BlogPost container bg-white pt-5'>
         <div className="row blog-item px-3 pb-5">
@@ -21,7 +22,7 @@ function BlogPost() {
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu suscipit orci velit id libero
                 </p>
                 {/* TODO change href */}
-                <a className="btn btn-link p-0 text-primary" href="/">Read More <FontAwesomeIcon icon={solid('angle-right')} className='text-primary'/></a>
+                <Link className="btn btn-link p-0 text-primary" href={"/post/" + post.title}>Read More <FontAwesomeIcon icon={solid('angle-right')} className='text-primary'/></Link>
             </div>
         </div>
     </div>
