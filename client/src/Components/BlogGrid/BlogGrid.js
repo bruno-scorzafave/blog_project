@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import PageHeader from '../PageHeader/PageHeader'
 import BlogPost from '../BlogPost/BlogPost';
+import BlogPost2 from '../BlogPost2/BlogPost2';
 
 function blogPosts() {
     return (
@@ -9,12 +10,11 @@ function blogPosts() {
         <BlogPost />,
         <BlogPost />,
         <BlogPost />,
+        <BlogPost2 />,
+        <BlogPost2 />,
         <BlogPost />,
         <BlogPost />,
-        <BlogPost />,
-        <BlogPost />,
-        <BlogPost />,
-        <BlogPost />
+        <BlogPost2 />
         ]
     )
 }
@@ -22,34 +22,45 @@ function blogPosts() {
 function BlogGrid() {
     const [currentPage, setCurrentPage] = useState(1)
     const [postsPerPage] = useState(3)
+    const pageNumbers = []
 
     const indexOfLastPost = currentPage * postsPerPage
     const indexOfFirstPost = indexOfLastPost - postsPerPage
     const currentPosts = blogPosts().slice(indexOfFirstPost, indexOfLastPost)
-    const lastPage = Math.ceil(blogPosts().length / postsPerPage )
+    const lastPage = Math.ceil(blogPosts().length / postsPerPage)
+
+    console.log('currentPage', currentPage)
+    console.log('indexOfLastPost', indexOfLastPost)
+    console.log('indexOfFirstPost', indexOfFirstPost)
+    console.log('currentPosts', currentPosts)
+    console.log('lastPage', lastPage)
+
+    for (let i = 1; i <= lastPage; i++) {
+        pageNumbers.push(i);
+    }
 
     return (
         <>
         <PageHeader title={"My Blog"}/>
         {currentPosts}
-        <div class="row px-3 pb-5">
+        <div className="row px-3 pb-5">
             <nav aria-label="Page navigation">
-                <ul class="pagination m-0 mx-3">
-                <li class={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                    <a class="page-link" href="#" aria-label="Previous">
-                    <span aria-hidden="true">«</span>
-                    <span class="sr-only">Previous</span>
-                    </a>
-                </li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                    <span aria-hidden="true">»</span>
-                    <span class="sr-only">Next</span>
-                    </a>
-                </li>
+                <ul className="pagination m-0 mx-3">
+                    <li id='prev' className={`page-item ${currentPage === 1 ? 'disabled' : ''}`} onClick={() => {setCurrentPage(currentPage - 1)}}>
+                        <button className="page-link" aria-label="Previous">
+                            <span aria-hidden="true">«</span>
+                            <span className="sr-only">Previous</span>
+                        </button>
+                    </li>
+                    {pageNumbers.map((number) => (
+                        <li id={number} className={`page-item ${currentPage === number ? 'active' : ''}`}><button className="page-link">{number}</button></li>
+                    ))}
+                    <li id='next' className={"page-item"} onClick={() => {setCurrentPage(currentPage + 1)}}>
+                        <button className={"page-link"} disabled={currentPage === lastPage} aria-label="Next">
+                            <span aria-hidden="true">»</span>
+                            <span className="sr-only">Next</span>
+                        </button>
+                    </li>
                 </ul>
             </nav>
         </div>
