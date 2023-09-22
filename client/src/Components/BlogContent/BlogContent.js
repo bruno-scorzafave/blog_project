@@ -21,9 +21,9 @@ function BlogContent() {
         <div className="BlogContent">
           <Navbar activeBar={0} />
           <BlogCarousel />
-          <BlogPost post={{title: "1"}} />
+          <BlogPost post={{title: "First Post"}} />
           <Newsletter />
-          <BlogPost post={{title: "2"}}/>
+          <BlogPost post={{title: "Second Post"}}/>
           <Copyright />
         </div>
       </Route>

@@ -2,6 +2,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { Link } from "wouter"
 
+import PostIcons from '../PostIcons/PostIcons';
+
 import './BlogPost.scss';
 
 function BlogPost({post}) {
@@ -13,11 +15,7 @@ function BlogPost({post}) {
             </div>
             <div className="col-md-7">
                 <h3 className="mt-md-4 px-md-3 mb-2 py-2 bg-white font-weight-bold">Lorem ipsum dolor sit amet</h3>
-                <div className="d-flex mb-3">
-                    <small className="me-2 text-muted"><FontAwesomeIcon icon={solid('calendar-days')} /> 01-Jan-2045</small>
-                    <small className="me-2 text-muted"><FontAwesomeIcon icon={solid('folder')} /> Web Design</small>
-                    <small className="me-2 text-muted"><FontAwesomeIcon icon={solid('comments')} /> 15 Comments</small>
-                </div>
+                <PostIcons tag={'small'}/>
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu suscipit orci velit id libero
                 </p>
