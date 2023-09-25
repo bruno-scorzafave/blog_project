@@ -4,6 +4,7 @@
 
 .Profile {
     display: flex;
+    z-index: 99;
     flex-direction: column;
     justify-content: center;
     text-align: center;
@@ -12,25 +13,25 @@
     float: left;
     padding: 30px;
     background: #ffffff;
+    -webkit-transition: margin 200ms ease-out, width 1s ease-out;
+    -moz-transition: margin 200ms ease-out, width 1s ease-out;
+    -o-transition: margin 200ms ease-out, width 1s ease-out;
+    transition: margin 200ms ease-out, width 1s ease-out;
 
     h1 {
         font-weight: 700;
     }
 
-    &-icon {
+    & &-icon {
         display: none !important;
     }
 
+    img {
+        max-height: 200px;
+    }
+
     @include media-breakpoint-only(md) {
-        position: fixed;
-        z-index: 99;
-        height: 100%;
         margin-left: -350px;
-        width: 350px;
-        -webkit-transition: margin 200ms ease-out;
-        -moz-transition: margin 200ms ease-out;
-        -o-transition: margin 200ms ease-out;
-        transition: margin 200ms ease-out;
         
         &:hover {
             margin: 0 !important;
@@ -40,11 +41,22 @@
             display: none !important;
         }
 
-        &-icon {
+        & &-icon {
             position: fixed;
+            display: flex !important;
             left: 0px;
             background: white;
             width: 60px;
         }
+    }
+
+    @include media-breakpoint-up(md) {
+        position: fixed;
+        height: 100%;
+        width: 350px;
+    }
+
+    @include media-breakpoint-up(lg) {
+        float: left;
     }
 }

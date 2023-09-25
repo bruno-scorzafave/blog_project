@@ -19,7 +19,6 @@ function BlogPost({post}) {
                 <p>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eu suscipit orci velit id libero
                 </p>
-                {/* TODO change href */}
                 <Link className="btn btn-link p-0 text-primary" href={"/post/" + post.title}>Read More <FontAwesomeIcon icon={solid('angle-right')} className='text-primary'/></Link>
             </div>
         </div>
