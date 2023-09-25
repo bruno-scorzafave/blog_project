@@ -1,3 +1,7 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+
 .Profile {
     display: flex;
     flex-direction: column;
@@ -11,5 +15,36 @@
 
     h1 {
         font-weight: 700;
+    }
+
+    &-icon {
+        display: none !important;
+    }
+
+    @include media-breakpoint-only(md) {
+        position: fixed;
+        z-index: 99;
+        height: 100%;
+        margin-left: -350px;
+        width: 350px;
+        -webkit-transition: margin 200ms ease-out;
+        -moz-transition: margin 200ms ease-out;
+        -o-transition: margin 200ms ease-out;
+        transition: margin 200ms ease-out;
+        
+        &:hover {
+            margin: 0 !important;
+        }
+
+        &:hover &-icon {
+            display: none !important;
+        }
+
+        &-icon {
+            position: fixed;
+            left: 0px;
+            background: white;
+            width: 60px;
+        }
     }
 }

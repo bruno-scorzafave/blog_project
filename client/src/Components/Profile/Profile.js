@@ -22,7 +22,7 @@ function Profile() {
                 <a href="https://www.linkedin.com/in/bruno-scorzafave/" target="_blank" rel="noreferrer" className="btn btn-lg btn-block btn-primary mt-auto">Hire Me</a>
             </div>
             <div className="Profile-icon d-flex flex-column h-100 justify-content-center text-right">
-                <FontAwesomeIcon icon={solid("angles-right")} />
+                <FontAwesomeIcon icon={solid("angles-right")} size="2xl"/>
             </div>
         </div>
     )
