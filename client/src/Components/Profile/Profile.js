@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { brands } from '@fortawesome/fontawesome-svg-core/import.macro'
+import { brands, solid } from '@fortawesome/fontawesome-svg-core/import.macro'
 
 import './Profile.scss';
 
@@ -21,10 +21,9 @@ function Profile() {
                 </div>
                 <a href="https://www.linkedin.com/in/bruno-scorzafave/" target="_blank" rel="noreferrer" className="btn btn-lg btn-block btn-primary mt-auto">Hire Me</a>
             </div>
-            {/* TODO only on bigger screens
             <div className="Profile-icon d-flex flex-column h-100 justify-content-center text-right">
-                <i className="fas fa-2x fa-angle-double-right text-primary"></i>
-            </div> */}
+                <FontAwesomeIcon icon={solid("angles-right")} />
+            </div>
         </div>
     )
 }

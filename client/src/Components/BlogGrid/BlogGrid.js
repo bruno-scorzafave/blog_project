@@ -7,14 +7,14 @@ import BlogPost2 from '../BlogPost2/BlogPost2';
 function blogPosts() {
     return (
         [
-        <BlogPost />,
-        <BlogPost />,
-        <BlogPost />,
-        <BlogPost2 />,
-        <BlogPost2 />,
-        <BlogPost />,
-        <BlogPost />,
-        <BlogPost2 />
+        <BlogPost post={{title: '1'}}/>,
+        <BlogPost post={{title: '2'}}/>,
+        <BlogPost post={{title: '3'}}/>,
+        <BlogPost2 post={{title: '4'}}/>,
+        <BlogPost2 post={{title: '5'}}/>,
+        <BlogPost post={{title: '6'}}/>,
+        <BlogPost post={{title: '7'}}/>,
+        <BlogPost2 post={{title: '8'}}/>
         ]
     )
 }
