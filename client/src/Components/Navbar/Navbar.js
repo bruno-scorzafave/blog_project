@@ -6,12 +6,12 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro'
 import './Navbar.scss';
 
 function Navbar({activeBar}) {
-    const [navbarShown, setNavbarShown] = useState(false)
+    const [navbarShown, setNavbarShown] = useState(window.screen.width > 991.98 ? true : false)
     const [dropdownShown, setDropdownShown] = useState(false)
 
 
     return (
-        <div className="Navbar container p-0" onMouseLeave={() => setNavbarShown(false)} >
+        <div className="Navbar container p-0" onMouseLeave={() => setNavbarShown(window.screen.width > 991.98 ? true : false)} >
             <nav className="navbar navbar-expand-lg bg-secondary navbar-dark">
                 <span className="navbar-brand d-block d-lg-none">Navigation</span>
                 <button
