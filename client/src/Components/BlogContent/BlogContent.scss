@@ -6,7 +6,6 @@
     position: relative;
     width: 100%;
     padding: 15px;
-    background: #f1f3ff;
 
     @include media-breakpoint-only(md) {
         padding: 30px;
@@ -16,6 +15,7 @@
 
     @include media-breakpoint-up(lg) {
         width: calc(100vw - 350px);
+        max-width: 790px;
         float: right;
         min-height: 100vh;
         padding: 30px;
