@@ -1,3 +1,4 @@
-.important {
-    color: red;
+.root {
+    height: 100vh;
+    background-color: var(--bs-indigo);
 }
