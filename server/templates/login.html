@@ -1,5 +1,23 @@
 <div class="root">
     <div class="login">
-        
+        <h1>Login</h1>
+        <form method="POST" action="{{ url_for('index') }}">
+            {{ form.csrf_token }}
+            <p>
+                {{ form.email.label }} <br> {{ form.email(size=30) }}
+            </p>
+            <p>
+                {{ form.password.label }} <br> {{ form.password(size=30) }}
+            </p>
+            {{ form.submit }}
+            <input type="submit" value="Log In">
+            {% if form.errors %}
+                <ul class="errors">
+                {% for error in form.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </form>
     </div>
 </div>
