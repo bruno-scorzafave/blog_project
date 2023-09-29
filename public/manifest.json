@@ -1,9 +1,0 @@
-{
-  "short_name": "Blog React App",
-  "name": "Create Blog React App Sample",
-  "icons": [],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
-}
