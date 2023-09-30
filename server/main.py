@@ -5,7 +5,7 @@ import dotenv
 import stytch
 from flask import Flask, render_template, redirect, request
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, validators
+from wtforms import StringField,validators
 
 # Stytch config
 dotenv.load_dotenv()
@@ -33,16 +33,27 @@ class LoginForm(FlaskForm):
     email = StringField('Email', [validators.InputRequired(), validators.Length(min=5)])
 
 
+class RegisterOrLoginForm(FlaskForm):
+    username = StringField(
+        'Username',
+        id='username_create',
+        validators=[validators.DataRequired()]
+    )
+    email = StringField(
+        'Email',
+        id='email_create',
+        validators=[validators.DataRequired(), validators.Email()]
+    )
+
+
 app = Flask(__name__)
 app.secret_key = os.getenv("APP_SECRET_KEY")
 
 
 @app.route("/", methods=['GET'])
 def index():
-    login_form = LoginForm()
-    if login_form.validate_on_submit():
-        return redirect('/dashboard')
-    return render_template("index.html", form=login_form)
+    login_form = RegisterOrLoginForm()
+    return render_template('accounts/login-or-register.html', form=login_form)
 
 
 @app.route("/login_or_create_user", methods=["POST"])
