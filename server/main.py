@@ -80,5 +80,10 @@ def authenticate():
     return redirect('/dashboard')
 
 
+@app.route("/dashboard")
+def dashboard():
+    return render_template('home/index.html')
+
+
 if __name__ == "__main__":
     app.run(host=HOST, port=PORT, debug=True)
