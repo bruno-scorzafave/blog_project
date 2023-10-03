@@ -3,15 +3,16 @@ import sys
 
 import dotenv
 import stytch
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, request, make_response
 from flask_wtf import FlaskForm
-from wtforms import StringField,validators
+from wtforms import StringField, validators
 
 # Stytch config
 dotenv.load_dotenv()
 
 HOST = os.getenv("HOST", "localhost")
 PORT = int(os.getenv("PORT", "4567"))
+HOST_LINK_URL = f"http://{HOST}:{PORT}"
 MAGIC_LINK_URL = f"http://{HOST}:{PORT}/authenticate"
 
 STYTCH_PROJECT_ID = os.getenv("STYTCH_PROJECT_ID")
@@ -67,22 +68,30 @@ def login_or_create_user() -> str:
     if resp.status_code != 200:
         print(resp)
         return "something went wrong sending magic link"
-    return render_template("emailSent.html")
+    return render_template("accounts/email-sent.html")
 
 
 @app.route("/authenticate")
 def authenticate():
-    resp = stytch_client.magic_links.authenticate(request.args["token"])
+    template_resp = make_response(render_template('home/index.html'))
+    try:
+        user_id = request.cookies.get('userID')
+        print(user_id)
+        resp = stytch_client.sessions.get(
+            user_id=user_id
+        )
+    except:
+        print("seesion cookie not working")
+        resp = stytch_client.magic_links.authenticate(
+            token=request.args["token"],
+            session_duration_minutes=1440
+        )
+        template_resp.set_cookie('userID', resp.user_id)
 
     if resp.status_code != 200:
         print(resp)
         return "something went wrong authenticating token"
-    return redirect('/dashboard')
-
-
-@app.route("/dashboard")
-def dashboard():
-    return render_template('home/index.html')
+    return template_resp
 
 
 if __name__ == "__main__":
