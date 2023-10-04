@@ -4,11 +4,10 @@ import dotenv
 import stytch
 
 from flask import Flask, render_template, request, make_response
-from flask_wtf import FlaskForm
-from wtforms import StringField, validators
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from Classes import User
+from Classes.User import User
+from Classes.RegisterOrLoginForm import RegisterOrLoginForm
 
 # mongo config
 MONGO_DB_USER = os.getenv("MONGO_DB_USER")
@@ -19,9 +18,14 @@ client = MongoClient(uri, server_api=ServerApi('1'))
 
 try:
     db = client['blog_project']
-    collection = db['users']
-    a = collection.insert_one({'x': 1, '_id': '0'})
-    print("Pinged your deployment. You successfully connected to MongoDB!")
+    user_collection = db['users']
+
+    # new_user = User('Bruno', 'brunoscorza@hotmail.com')
+    # print(new_user.__dict__)
+    #
+    # user_collection.insert_one(new_user.__dict__)
+
+    print("You successfully connected to MongoDB!")
 except Exception as e:
     print(e)
 
@@ -47,21 +51,7 @@ stytch_client = stytch.Client(
     environment="test",
 )
 
-
-# Forms class
-class RegisterOrLoginForm(FlaskForm):
-    username = StringField(
-        'Username',
-        id='username_create',
-        validators=[validators.DataRequired()]
-    )
-    email = StringField(
-        'Email',
-        id='email_create',
-        validators=[validators.DataRequired(), validators.Email()]
-    )
-
-
+# Flask
 app = Flask(__name__)
 app.secret_key = os.getenv("APP_SECRET_KEY")
 
@@ -83,6 +73,16 @@ def login_or_create_user() -> str:
     if resp.status_code != 200:
         print(resp)
         return "something went wrong sending magic link"
+
+    recorded_user = user_collection.find_one({'email': request.form['email']})
+    print(recorded_user)
+
+    if not recorded_user:
+
+        new_user = User(request.form['username'], request.form['email'])
+        print(new_user.__dict__)
+
+        user_collection.insert_one(new_user.__dict__)
     return render_template("accounts/email-sent.html")
 
 

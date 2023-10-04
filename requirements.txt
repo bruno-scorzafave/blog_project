@@ -9,3 +9,5 @@ Werkzeug==2.3.7
 WTForms==3.0.1
 python-dotenv~=0.20
 stytch~=7.6
+pymongo~=4.5.0
+email-validator==2.0.0.post2
