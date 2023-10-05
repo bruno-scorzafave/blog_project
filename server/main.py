@@ -70,27 +70,20 @@ def login_or_create_user() -> str:
         signup_magic_link_url=MAGIC_LINK_URL,
     )
 
+    search_user = stytch_client.users.search_all()
+    print(search_user)
+
     if resp.status_code != 200:
         print(resp)
         return "something went wrong sending magic link"
-
-    recorded_user = user_collection.find_one({'email': request.form['email']})
-    print(recorded_user)
-
-    if not recorded_user:
-
-        new_user = User(request.form['username'], request.form['email'])
-        print(new_user.__dict__)
-
-        user_collection.insert_one(new_user.__dict__)
     return render_template("accounts/email-sent.html")
 
 
 @app.route("/authenticate")
 def authenticate():
     template_resp = make_response(render_template('home/index.html'))
+    user_id = request.cookies.get('userID')
     try:
-        user_id = request.cookies.get('userID')
         resp = stytch_client.sessions.get(
             user_id=user_id
         )
@@ -104,6 +97,21 @@ def authenticate():
     if resp.status_code != 200:
         print(resp)
         return "something went wrong authenticating token"
+
+    # user_resp = stytch_client.users.get(
+    #     user_id=user_id
+    # )
+    #
+    # user_email = user_resp.emails[0].__dict__['email']
+    # recorded_user = user_collection.find_one({'email': request.form['email']})
+    # print(recorded_user)
+    #
+    # if not recorded_user:
+    #
+    #     new_user = User(request.form['username'], request.form['email'])
+    #     print(new_user.__dict__)
+    #
+    #     user_collection.insert_one(new_user.__dict__)
     return template_resp
 
 
