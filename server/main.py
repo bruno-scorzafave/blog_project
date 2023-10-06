@@ -20,11 +20,6 @@ try:
     db = client['blog_project']
     user_collection = db['users']
 
-    # new_user = User('Bruno', 'brunoscorza@hotmail.com')
-    # print(new_user.__dict__)
-    #
-    # user_collection.insert_one(new_user.__dict__)
-
     print("You successfully connected to MongoDB!")
 except Exception as e:
     print(e)
@@ -70,9 +65,6 @@ def login_or_create_user() -> str:
         signup_magic_link_url=MAGIC_LINK_URL,
     )
 
-    search_user = stytch_client.users.search_all()
-    print(search_user)
-
     if resp.status_code != 200:
         print(resp)
         return "something went wrong sending magic link"
@@ -82,36 +74,36 @@ def login_or_create_user() -> str:
 @app.route("/authenticate")
 def authenticate():
     template_resp = make_response(render_template('home/index.html'))
-    user_id = request.cookies.get('userID')
     try:
+        cookie_user_id = request.cookies.get('userID')
         resp = stytch_client.sessions.get(
-            user_id=user_id
+            user_id=cookie_user_id
         )
+        user_id = resp.sessions[0].user_id
+        print('try worked')
     except:
         resp = stytch_client.magic_links.authenticate(
             token=request.args["token"],
             session_duration_minutes=1440
         )
         template_resp.set_cookie('userID', resp.user_id)
+        user_id = resp.user_id
+        print('except worked')
 
     if resp.status_code != 200:
         print(resp)
         return "something went wrong authenticating token"
 
-    # user_resp = stytch_client.users.get(
-    #     user_id=user_id
-    # )
-    #
-    # user_email = user_resp.emails[0].__dict__['email']
-    # recorded_user = user_collection.find_one({'email': request.form['email']})
-    # print(recorded_user)
-    #
-    # if not recorded_user:
-    #
-    #     new_user = User(request.form['username'], request.form['email'])
-    #     print(new_user.__dict__)
-    #
-    #     user_collection.insert_one(new_user.__dict__)
+    user_resp = stytch_client.users.get(
+        user_id=user_id
+    )
+
+    user_email = user_resp.emails[0].__dict__['email']
+    recorded_user = user_collection.find_one({'email': user_email})
+
+    if not recorded_user:
+        new_user = User(user_email)
+        user_collection.insert_one(new_user.__dict__)
     return template_resp
 
 
@@ -127,6 +119,25 @@ def dashboard():
         login_form = RegisterOrLoginForm()
         return render_template('accounts/login-or-register.html', form=login_form)
     return render_template('home/index.html')
+
+
+@app.route("/profile")
+def profile():
+    user_id = request.cookies.get('userID')
+
+    user_resp = stytch_client.users.get(
+        user_id=user_id
+    )
+
+    user_email = user_resp.emails[0].__dict__['email']
+    recorded_user = user_collection.find_one({'email': user_email})
+    print(recorded_user)
+
+    if user_resp.status_code != 200:
+        print(user_resp)
+        login_form = RegisterOrLoginForm()
+        return render_template('accounts/login-or-register.html', form=login_form)
+    return render_template('home/profile.html', current_user=recorded_user)
 
 
 if __name__ == "__main__":
