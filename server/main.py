@@ -9,6 +9,8 @@ from pymongo.server_api import ServerApi
 from Classes.User import User
 from Classes.RegisterOrLoginForm import RegisterOrLoginForm
 
+dotenv.load_dotenv()
+
 # mongo config
 MONGO_DB_USER = os.getenv("MONGO_DB_USER")
 MONGO_DB_PASSWORD = os.getenv("MONGO_DB_PASSWORD")
@@ -26,8 +28,6 @@ except Exception as e:
 
 
 # Stytch config
-dotenv.load_dotenv()
-
 HOST = os.getenv("HOST", "localhost")
 PORT = int(os.getenv("PORT", "4567"))
 HOST_LINK_URL = f"http://{HOST}:{PORT}"
@@ -57,8 +57,8 @@ def index():
     return render_template('accounts/login-or-register.html', form=login_form)
 
 
-@app.route("/login_or_create_user", methods=["POST"])
-def login_or_create_user() -> str:
+@app.route("/email_sent", methods=["POST"])
+def email_sent() -> str:
     resp = stytch_client.magic_links.email.login_or_create(
         email=request.form["email"],
         login_magic_link_url=MAGIC_LINK_URL,
@@ -68,6 +68,18 @@ def login_or_create_user() -> str:
     if resp.status_code != 200:
         print(resp)
         return "something went wrong sending magic link"
+
+    user_id = resp.user_id
+    user_resp = stytch_client.users.get(
+        user_id=user_id
+    )
+
+    user_email = user_resp.emails[0].__dict__['email']
+    recorded_user = user_collection.find_one({'email': user_email})
+
+    if not recorded_user:
+        new_user = User(user_email, request.form['username'])
+        user_collection.insert_one(new_user.__dict__)
     return render_template("accounts/email-sent.html")
 
 
@@ -86,8 +98,8 @@ def authenticate():
             token=request.args["token"],
             session_duration_minutes=1440
         )
-        template_resp.set_cookie('userID', resp.user_id)
         user_id = resp.user_id
+        template_resp.set_cookie('userID', user_id)
         print('except worked')
 
     if resp.status_code != 200:
@@ -99,16 +111,19 @@ def authenticate():
     )
 
     user_email = user_resp.emails[0].__dict__['email']
-    recorded_user = user_collection.find_one({'email': user_email})
+    filter_email = {"email": user_email}
+    recorded_user = user_collection.find_one(filter_email)
 
-    if not recorded_user:
-        new_user = User(user_email)
-        user_collection.insert_one(new_user.__dict__)
+    if not recorded_user['authenticated']:
+        new_value = {"$set": {"authenticated": True}}
+
+        user_collection.update_one(filter_email, new_value)
     return template_resp
 
 
 @app.route("/dashboard")
 def dashboard():
+    # TODO: auth with mongo
     user_id = request.cookies.get('userID')
     resp = stytch_client.sessions.get(
         user_id=user_id
