@@ -3,11 +3,13 @@ import sys
 import dotenv
 import stytch
 
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, make_response, redirect
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from Classes.User import User
-from Classes.RegisterOrLoginForm import RegisterOrLoginForm
+from Classes.RegisterOrLoginForm import RegisterOrLoginForm, EditUser
+# TODO: take out this import
+from stytch.consumer.models.users import Name
 
 dotenv.load_dotenv()
 
@@ -52,6 +54,7 @@ app.secret_key = os.getenv("APP_SECRET_KEY")
 
 
 @app.route("/", methods=['GET'])
+# TODO: page for login and another for register
 def index():
     login_form = RegisterOrLoginForm()
     return render_template('accounts/login-or-register.html', form=login_form)
@@ -85,6 +88,7 @@ def email_sent() -> str:
 
 @app.route("/authenticate")
 def authenticate():
+    # TODO: get session cookie and auth with mongo
     template_resp = make_response(render_template('home/index.html'))
     try:
         cookie_user_id = request.cookies.get('userID')
@@ -92,7 +96,6 @@ def authenticate():
             user_id=cookie_user_id
         )
         user_id = resp.sessions[0].user_id
-        print('try worked')
     except:
         resp = stytch_client.magic_links.authenticate(
             token=request.args["token"],
@@ -100,7 +103,6 @@ def authenticate():
         )
         user_id = resp.user_id
         template_resp.set_cookie('userID', user_id)
-        print('except worked')
 
     if resp.status_code != 200:
         print(resp)
@@ -116,43 +118,67 @@ def authenticate():
 
     if not recorded_user['authenticated']:
         new_value = {"$set": {"authenticated": True}}
-
         user_collection.update_one(filter_email, new_value)
     return template_resp
 
 
 @app.route("/dashboard")
 def dashboard():
-    # TODO: auth with mongo
-    user_id = request.cookies.get('userID')
-    resp = stytch_client.sessions.get(
-        user_id=user_id
-    )
+    # TODO: auth with mongo?
+    try:
+        user_id = request.cookies.get('userID')
+        resp = stytch_client.sessions.get(
+            user_id=user_id
+        )
+    except Exception as e:
+        resp = None
+        print(e)
 
-    if resp.status_code != 200:
+    if resp is None or resp.status_code != 200:
         print(resp)
-        login_form = RegisterOrLoginForm()
-        return render_template('accounts/login-or-register.html', form=login_form)
+        return redirect('/')
     return render_template('home/index.html')
 
 
-@app.route("/profile")
+@app.route("/profile", methods=["GET", "POST"])
 def profile():
-    user_id = request.cookies.get('userID')
+    try:
+        user_id = request.cookies.get('userID')
+        user_resp = stytch_client.users.get(
+            user_id=user_id
+        )
+    except Exception as e:
+        user_resp = None
+        print(e)
 
-    user_resp = stytch_client.users.get(
-        user_id=user_id
-    )
+    if user_resp is None or user_resp.status_code != 200:
+        print(user_resp)
+        return redirect('/')
 
     user_email = user_resp.emails[0].__dict__['email']
-    recorded_user = user_collection.find_one({'email': user_email})
-    print(recorded_user)
+    if 'edit_user' in request.form:
+        user = User(
+            email=request.form['email'],
+            username=request.form['username'],
+            firstname=request.form['firstname'],
+            lastname=request.form['lastname'],
+            aboutme=request.form['aboutme'],
+            authenticated=True
+        )
 
-    if user_resp.status_code != 200:
-        print(user_resp)
-        login_form = RegisterOrLoginForm()
-        return render_template('accounts/login-or-register.html', form=login_form)
-    return render_template('home/profile.html', current_user=recorded_user)
+        filter_email = {"email": user_email}
+        new_value = {"$set": user.__dict__}
+        user_collection.update_one(filter_email, new_value)
+    recorded_user = user_collection.find_one({'email': user_email})
+    edit_user_form = EditUser(
+        email=recorded_user['email'],
+        username=recorded_user['username'],
+        firstname=recorded_user['firstname'],
+        lastname=recorded_user['lastname'],
+        aboutme=recorded_user['aboutme'] if recorded_user['aboutme'] else ''
+    )
+
+    return render_template('home/profile.html', current_user=recorded_user, form=edit_user_form)
 
 
 if __name__ == "__main__":
