@@ -7,12 +7,13 @@ from flask import Flask, render_template, request, make_response, redirect
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from Classes.User import User
-from Classes.RegisterOrLoginForm import RegisterOrLoginForm, EditUser
-# TODO: take out this import
+from Classes.Forms import RegisterOrLoginForm, EditUser
+# TODO: remove this import
 from stytch.consumer.models.users import Name
 
 dotenv.load_dotenv()
 
+# TODO: pass configs to different files
 # mongo config
 MONGO_DB_USER = os.getenv("MONGO_DB_USER")
 MONGO_DB_PASSWORD = os.getenv("MONGO_DB_PASSWORD")
@@ -81,7 +82,7 @@ def email_sent() -> str:
     recorded_user = user_collection.find_one({'email': user_email})
 
     if not recorded_user:
-        new_user = User(user_email, request.form['username'])
+        new_user = User(user_email)
         user_collection.insert_one(new_user.__dict__)
     return render_template("accounts/email-sent.html")
 
@@ -95,7 +96,6 @@ def authenticate():
         resp = stytch_client.sessions.get(
             user_id=cookie_user_id
         )
-        user_id = resp.sessions[0].user_id
     except:
         resp = stytch_client.magic_links.authenticate(
             token=request.args["token"],
@@ -107,18 +107,6 @@ def authenticate():
     if resp.status_code != 200:
         print(resp)
         return "something went wrong authenticating token"
-
-    user_resp = stytch_client.users.get(
-        user_id=user_id
-    )
-
-    user_email = user_resp.emails[0].__dict__['email']
-    filter_email = {"email": user_email}
-    recorded_user = user_collection.find_one(filter_email)
-
-    if not recorded_user['authenticated']:
-        new_value = {"$set": {"authenticated": True}}
-        user_collection.update_one(filter_email, new_value)
     return template_resp
 
 
@@ -162,8 +150,7 @@ def profile():
             username=request.form['username'],
             firstname=request.form['firstname'],
             lastname=request.form['lastname'],
-            aboutme=request.form['aboutme'],
-            authenticated=True
+            aboutme=request.form['aboutme']
         )
 
         filter_email = {"email": user_email}
@@ -179,6 +166,11 @@ def profile():
     )
 
     return render_template('home/profile.html', current_user=recorded_user, form=edit_user_form)
+
+
+@app.route("/create_post")
+def create_post():
+    return render_template('home/create_post.html')
 
 
 if __name__ == "__main__":

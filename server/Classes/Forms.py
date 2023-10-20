@@ -3,11 +3,6 @@ from wtforms import StringField, validators, TextAreaField
 
 
 class RegisterOrLoginForm(FlaskForm):
-    username = StringField(
-        'Username',
-        id='username_create',
-        validators=[validators.DataRequired()]
-    )
     email = StringField(
         'Email',
         id='email_create',
@@ -39,3 +34,6 @@ class EditUser(FlaskForm):
         id='aboutme_edit',
         render_kw={'rows': 4, 'resize': 'none'}
     )
+
+class CreatePost(FlaskForm):
+    
