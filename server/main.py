@@ -7,7 +7,7 @@ from flask import Flask, render_template, request, make_response, redirect
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from Classes.User import User
-from Classes.Forms import RegisterOrLoginForm, EditUser
+from Classes.Forms import RegisterOrLoginForm, EditUserForm
 # TODO: remove this import
 from stytch.consumer.models.users import Name
 
@@ -157,7 +157,7 @@ def profile():
         new_value = {"$set": user.__dict__}
         user_collection.update_one(filter_email, new_value)
     recorded_user = user_collection.find_one({'email': user_email})
-    edit_user_form = EditUser(
+    edit_user_form = EditUserForm(
         email=recorded_user['email'],
         username=recorded_user['username'],
         firstname=recorded_user['firstname'],

@@ -10,7 +10,7 @@ class RegisterOrLoginForm(FlaskForm):
     )
 
 
-class EditUser(FlaskForm):
+class EditUserForm(FlaskForm):
     username = StringField(
         'Username',
         id='username_edit',
@@ -35,5 +35,5 @@ class EditUser(FlaskForm):
         render_kw={'rows': 4, 'resize': 'none'}
     )
 
-class CreatePost(FlaskForm):
-    
+# class CreatePost(FlaskForm):
+#
