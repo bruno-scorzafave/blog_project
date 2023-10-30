@@ -6,8 +6,10 @@ import stytch
 from flask import Flask, render_template, request, make_response, redirect
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+from flask_ckeditor import CKEditor
 from Classes.User import User
-from Classes.Forms import RegisterOrLoginForm, EditUserForm
+from Classes.BlogPost import BlogPost
+from Classes.Forms import RegisterOrLoginForm, EditUserForm, CreatePostForm
 # TODO: remove this import
 from stytch.consumer.models.users import Name
 
@@ -52,6 +54,8 @@ stytch_client = stytch.Client(
 # Flask
 app = Flask(__name__)
 app.secret_key = os.getenv("APP_SECRET_KEY")
+
+ckeditor = CKEditor(app)
 
 
 @app.route("/", methods=['GET'])
@@ -168,9 +172,31 @@ def profile():
     return render_template('home/profile.html', current_user=recorded_user, form=edit_user_form)
 
 
-@app.route("/create_post")
+@app.route("/create_post", methods=["GET", "POST"])
 def create_post():
-    return render_template('home/create_post.html')
+    try:
+        user_id = request.cookies.get('userID')
+        user_resp = stytch_client.users.get(
+            user_id=user_id
+        )
+    except Exception as e:
+        user_resp = None
+        print(e)
+
+    if user_resp is None or user_resp.status_code != 200:
+        print(user_resp)
+        return redirect('/')
+
+    user_email = user_resp.emails[0].__dict__['email']
+    if 'create_post' in request.form:
+        post = BlogPost(
+            title=request.form['title'],
+            description=request.form['description'],
+            slug=request.form['slug'],
+            content=request.form['content']
+        )
+    create_post_form = CreatePostForm()
+    return render_template('home/create_post.html', form=create_post_form)
 
 
 if __name__ == "__main__":

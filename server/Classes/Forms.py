@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, validators, TextAreaField
+from flask_ckeditor import CKEditorField
+from wtforms import StringField, validators, TextAreaField, DateTimeField
 
 
 class RegisterOrLoginForm(FlaskForm):
@@ -35,5 +36,32 @@ class EditUserForm(FlaskForm):
         render_kw={'rows': 4, 'resize': 'none'}
     )
 
-# class CreatePost(FlaskForm):
-#
+
+class CreatePostForm(FlaskForm):
+    title = StringField(
+        'Title',
+        id='create_post_title',
+        validators=[validators.DataRequired()]
+    )
+    description = StringField(
+        'Description',
+        id='create_post_description',
+        validators=[validators.DataRequired()]
+    )
+    slug = StringField(
+        'Slug',
+        id='create_post_slug',
+        validators=[validators.DataRequired()]
+    )
+    content = CKEditorField(
+        'Content',
+        id='create_post_content',
+        render_kw={'rows': 5, 'resize': 'none'},
+        validators=[validators.DataRequired()]
+    )
+    date = DateTimeField(
+        'Date',
+        id='create_post_date',
+        render_kw={'display': 'none'},
+        validators=[validators.DataRequired()]
+    )

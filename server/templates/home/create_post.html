@@ -24,6 +24,62 @@
   </div>
   <!-- Page content -->
   <div class="container-fluid mt--6">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <div class="row align-items-center">
+              <div class="col-12">
+                <h3 class="mb-0">Create Post </h3>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <form role="form" method="post" action="{{ url_for('profile') }}">
+
+              {{ form.hidden_tag() }}
+
+              <div class="pl-lg-4">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="form-group">
+                      {{ form.title(placeholder="Title",class="form-control") }}
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <div class="form-group">
+                      {{ form.description(placeholder="Description",class="form-control") }}
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <div class="form-group">
+                      {{ form.slug(placeholder="Slug",class="form-control") }}
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <div class="form-group">
+                      {{ form.content(class="form-control") }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr class="my-4" />
+              <div class="text-center">
+                  <button type="submit" name="create_post" class="btn btn-primary my-4">Save</button>
+              </div>
+            </form>
+            {{ ckeditor.load() }}
+            {{ ckeditor.config(name='content') }}
+          </div>
+        </div>
+      </div>
+    </div>
 
     {% include "includes/footer.html" %}
 
