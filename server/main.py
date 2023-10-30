@@ -148,6 +148,7 @@ def profile():
         return redirect('/')
 
     user_email = user_resp.emails[0].__dict__['email']
+    filter_email = {"email": user_email}
     if 'edit_user' in request.form:
         user = User(
             email=request.form['email'],
@@ -157,10 +158,9 @@ def profile():
             aboutme=request.form['aboutme']
         )
 
-        filter_email = {"email": user_email}
         new_value = {"$set": user.__dict__}
         user_collection.update_one(filter_email, new_value)
-    recorded_user = user_collection.find_one({'email': user_email})
+    recorded_user = user_collection.find_one(filter_email)
     edit_user_form = EditUserForm(
         email=recorded_user['email'],
         username=recorded_user['username'],
@@ -189,12 +189,19 @@ def create_post():
 
     user_email = user_resp.emails[0].__dict__['email']
     if 'create_post' in request.form:
+        filter_email = {"email": user_email}
+        recorded_user = user_collection.find_one(filter_email)
+        post_id = recorded_user['posts']['qty'] + 1
         post = BlogPost(
+            id=post_id,
             title=request.form['title'],
             description=request.form['description'],
             slug=request.form['slug'],
             content=request.form['content']
         )
+        user_collection.update_one(filter_email, {'$set': post.dict()})
+        user_collection.update_one(filter_email, {'$set': {'posts.qty': post_id}})
+
     create_post_form = CreatePostForm()
     return render_template('home/create_post.html', form=create_post_form)
 

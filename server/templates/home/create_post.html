@@ -35,7 +35,7 @@
             </div>
           </div>
           <div class="card-body">
-            <form role="form" method="post" action="{{ url_for('profile') }}">
+            <form role="form" method="post" action="{{ url_for('create_post') }}">
 
               {{ form.hidden_tag() }}
 
@@ -69,7 +69,6 @@
                   </div>
                 </div>
               </div>
-              <hr class="my-4" />
               <div class="text-center">
                   <button type="submit" name="create_post" class="btn btn-primary my-4">Save</button>
               </div>
