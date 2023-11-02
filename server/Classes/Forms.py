@@ -37,7 +37,7 @@ class EditUserForm(FlaskForm):
     )
 
 
-class CreatePostForm(FlaskForm):
+class CreateOrUpdatePostForm(FlaskForm):
     title = StringField(
         'Title',
         id='create_post_title',

@@ -9,7 +9,7 @@ from pymongo.server_api import ServerApi
 from flask_ckeditor import CKEditor
 from Classes.User import User
 from Classes.BlogPost import BlogPost
-from Classes.Forms import RegisterOrLoginForm, EditUserForm, CreatePostForm
+from Classes.Forms import RegisterOrLoginForm, EditUserForm, CreateOrUpdatePostForm
 # TODO: remove this import
 from stytch.consumer.models.users import Name
 
@@ -172,8 +172,8 @@ def profile():
     return render_template('home/profile.html', current_user=recorded_user, form=edit_user_form)
 
 
-@app.route("/create_post", methods=["GET", "POST"])
-def create_post():
+@app.route("/post/<type>/<post_id>", methods=["GET", "POST"])
+def post(type, post_id):
     try:
         user_id = request.cookies.get('userID')
         user_resp = stytch_client.users.get(
@@ -188,22 +188,68 @@ def create_post():
         return redirect('/')
 
     user_email = user_resp.emails[0].__dict__['email']
-    if 'create_post' in request.form:
-        filter_email = {"email": user_email}
-        recorded_user = user_collection.find_one(filter_email)
-        post_id = recorded_user['posts']['qty'] + 1
-        post = BlogPost(
-            id=post_id,
-            title=request.form['title'],
-            description=request.form['description'],
-            slug=request.form['slug'],
-            content=request.form['content']
-        )
-        user_collection.update_one(filter_email, {'$set': post.dict()})
-        user_collection.update_one(filter_email, {'$set': {'posts.qty': post_id}})
+    filter_email = {"email": user_email}
+    recorded_user = user_collection.find_one(filter_email)
+    if 'save_post' in request.form:
+        if post_id in recorded_user['posts']:
+            post = recorded_user['posts'][str(post_id)]
+            post_class = BlogPost(
+                id=post_id,
+                title=request.form['title'],
+                description=request.form['description'],
+                slug=request.form['slug'],
+                content=request.form['content'],
+                created_at=post['created_at']
+            )
+            user_collection.update_one(filter_email, {'$set': post_class.dict()})
+        else:
+            post_class = BlogPost(
+                id=post_id,
+                title=request.form['title'],
+                description=request.form['description'],
+                slug=request.form['slug'],
+                content=request.form['content']
+            )
+            user_collection.update_one(filter_email, {'$set': post_class.dict()})
+            user_collection.update_one(filter_email, {'$set': {'posts.qty': post_id}})
 
-    create_post_form = CreatePostForm()
-    return render_template('home/create_post.html', form=create_post_form)
+    recorded_user = user_collection.find_one(filter_email)
+    if type == 'delete':
+        user_collection.update_one(filter_email, {'$unset': {f'posts.{post_id}': ''}})
+        return redirect('/posts')
+    create_post_form = CreateOrUpdatePostForm()
+    if type == 'update':
+        post = recorded_user['posts'][str(post_id)]
+        create_post_form.title.data = post['title']
+        create_post_form.description.data = post['description']
+        create_post_form.slug.data = post['slug']
+        create_post_form.content.data = post['content']
+
+    return render_template('home/create_or_update_post.html', form=create_post_form, type=type, post_id=post_id)
+
+
+@app.route("/posts")
+def posts():
+    try:
+        user_id = request.cookies.get('userID')
+        user_resp = stytch_client.users.get(
+            user_id=user_id
+        )
+    except Exception as e:
+        user_resp = None
+        print(e)
+
+    if user_resp is None or user_resp.status_code != 200:
+        print(user_resp)
+        return redirect('/')
+    user_email = user_resp.emails[0].__dict__['email']
+    filter_email = {"email": user_email}
+    recorded_user = user_collection.find_one(filter_email)
+
+    posts = recorded_user['posts']
+    posts_qty = posts['qty']
+
+    return render_template('home/posts.html', posts=posts, posts_qty=posts_qty)
 
 
 if __name__ == "__main__":

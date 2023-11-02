@@ -1,0 +1,65 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Profile {% endblock title %}
+
+{% block content %}
+
+  <div class="header bg-primary pb-6">
+      <div class="container-fluid">
+        <div class="header-body">
+          <div class="row align-items-center py-4">
+            <div class="col-12">
+              <h6 class="h2 text-white d-inline-block mb-0">Post List</h6>
+              <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                  <li class="breadcrumb-item"><a href="/dashboard"><i class="fas fa-home"></i></a></li>
+                  <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Post List</li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+    <div class="container-fluid mt--6">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <div class="row align-items-center">
+              <div class="col-11">
+                <h3 class="mb-0">Post List</h3>
+              </div>
+              <button type="button" class="col-1 btn btn-primary" onclick="window.location.href='{{ url_for( 'post', type='create', post_id=posts_qty|int + 1) }}';">Create Post</button>
+            </div>
+          </div>
+          <div class="card-body">
+            {% for n in range(1, posts_qty|int + 1) %}
+              <div class="column border rounded border-primary p-4 mb-4">
+                <div class="row">
+                  <h1 class="col-10">{{ posts[n|string]['title'] }}</h1>
+                  <div class="col-2">
+                    <button type="button" class="btn btn-danger float-right" onclick="window.location.href='{{ url_for( 'post', type='delete', post_id=n|string ) }}';"><i class="fas fa-trash-alt"></i></button>
+                    <button type="button" class="btn btn-primary float-right mr-2" onclick="window.location.href='{{ url_for( 'post', type='update', post_id=n|string ) }}';">Edit</button>
+                  </div>
+                </div>
+                <hr>
+                <p>Description: {{ posts[n|string]['description'] }}</p>
+                <p>Slug: {{ posts[n|string]['slug'] }}</p>
+                <p>Created at: {{ posts[n|string]['created_at'].strftime('%Y-%m-%d %H:%m') }}</p>
+                <p>Updated at: {{ posts[n|string]['updated_at'].strftime('%Y-%m-%d %H:%m') }}</p>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% include "includes/footer.html" %}
+
+  </div>
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}{% endblock javascripts %}
