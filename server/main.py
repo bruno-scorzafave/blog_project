@@ -2,6 +2,7 @@ import os
 import sys
 import dotenv
 import stytch
+import json
 
 from flask import Flask, render_template, request, make_response, redirect
 from pymongo.mongo_client import MongoClient
@@ -250,6 +251,28 @@ def posts():
     posts_qty = posts['qty']
 
     return render_template('home/posts.html', posts=posts, posts_qty=posts_qty)
+
+
+@app.route("/get_posts")
+def get_posts():
+    try:
+        user_id = request.cookies.get('userID')
+        user_resp = stytch_client.users.get(
+            user_id=user_id
+        )
+    except Exception as e:
+        user_resp = None
+        print(e)
+
+    if user_resp is None or user_resp.status_code != 200:
+        print(user_resp)
+        return redirect('/')
+
+    user_email = user_resp.emails[0].__dict__['email']
+    filter_email = {"email": user_email}
+    recorded_user = user_collection.find_one(filter_email)
+
+    return json.dumps(recorded_user['posts'], default=str)
 
 
 if __name__ == "__main__":
