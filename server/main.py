@@ -212,11 +212,13 @@ def post(type, post_id):
                 content=request.form['content']
             )
             user_collection.update_one(filter_email, {'$set': post_class.dict()})
-            user_collection.update_one(filter_email, {'$set': {'posts.qty': post_id}})
+            user_collection.update_one(filter_email, {'$set': {'posts.qty': int(recorded_user['posts']['qty']) + 1}})
+            user_collection.update_one(filter_email, {'$set': {'posts.last_indexed': int(recorded_user['posts']['last_indexed']) + 1}})
 
     recorded_user = user_collection.find_one(filter_email)
     if type == 'delete':
         user_collection.update_one(filter_email, {'$unset': {f'posts.{post_id}': ''}})
+        user_collection.update_one(filter_email, {'$set': {'posts.qty': int(recorded_user['posts']['qty']) - 1}})
         return redirect('/posts')
     create_post_form = CreateOrUpdatePostForm()
     if type == 'update':
@@ -248,9 +250,9 @@ def posts():
     recorded_user = user_collection.find_one(filter_email)
 
     posts = recorded_user['posts']
-    posts_qty = posts['qty']
+    posts_last_indexed = posts['last_indexed']
 
-    return render_template('home/posts.html', posts=posts, posts_qty=posts_qty)
+    return render_template('home/posts.html', posts=posts, posts_last_indexed=posts_last_indexed)
 
 
 @app.route("/get_posts")

@@ -28,28 +28,33 @@
         <div class="card">
           <div class="card-header">
             <div class="row align-items-center">
-              <div class="col-11">
+              <div class="col-9 col-lg-10">
                 <h3 class="mb-0">Post List</h3>
               </div>
-              <button type="button" class="col-1 btn btn-primary" onclick="window.location.href='{{ url_for( 'post', type='create', post_id=posts_qty|int + 1) }}';">Create Post</button>
+              <div class="col-3 col-lg-2">
+                <button type="button" class="btn btn-primary float-right" onclick="window.location.href='{{ url_for( 'post', type='create', post_id=posts_last_indexed|int + 1) }}';">Create Post</button>
+              </div>
             </div>
           </div>
           <div class="card-body">
-            {% for n in range(1, posts_qty|int + 1) %}
+            {% for key, dict in posts.items() %}
+              {% if key == 'qty' or key == 'last_indexed' %}
+              {% else %}
               <div class="column border rounded border-primary p-4 mb-4">
                 <div class="row">
-                  <h1 class="col-10">{{ posts[n|string]['title'] }}</h1>
-                  <div class="col-2">
-                    <button type="button" class="btn btn-danger float-right" onclick="window.location.href='{{ url_for( 'post', type='delete', post_id=n|string ) }}';"><i class="fas fa-trash-alt"></i></button>
-                    <button type="button" class="btn btn-primary float-right mr-2" onclick="window.location.href='{{ url_for( 'post', type='update', post_id=n|string ) }}';">Edit</button>
+                  <h1 class="col-8">{{ dict['title'] }}</h1>
+                  <div class="col-4">
+                    <button type="button" class="btn btn-danger float-right" onclick="window.location.href='{{ url_for( 'post', type='delete', post_id=key ) }}';"><i class="fas fa-trash-alt"></i></button>
+                    <button type="button" class="btn btn-primary float-right mr-2" onclick="window.location.href='{{ url_for( 'post', type='update', post_id=key ) }}';">Edit</button>
                   </div>
                 </div>
                 <hr>
-                <p>Description: {{ posts[n|string]['description'] }}</p>
-                <p>Slug: {{ posts[n|string]['slug'] }}</p>
-                <p>Created at: {{ posts[n|string]['created_at'].strftime('%Y-%m-%d %H:%m') }}</p>
-                <p>Updated at: {{ posts[n|string]['updated_at'].strftime('%Y-%m-%d %H:%m') }}</p>
+                <p>Description: {{ dict['description'] }}</p>
+                <p>Slug: {{ dict['slug'] }}</p>
+                <p>Created at: {{ dict['created_at'].strftime('%Y-%m-%d %H:%m') }}</p>
+                <p>Updated at: {{ dict['updated_at'].strftime('%Y-%m-%d %H:%m') }}</p>
               </div>
+              {% endif %}
             {% endfor %}
           </div>
         </div>
