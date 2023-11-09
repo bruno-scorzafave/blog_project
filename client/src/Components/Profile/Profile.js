@@ -1,17 +1,29 @@
+import React, { useEffect, useState} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { brands, solid } from '@fortawesome/fontawesome-svg-core/import.macro'
+
+import axios from '../../axios';
 
 import './Profile.scss';
 
 
 function Profile() {
+    const [profile, setProfile] = useState([]);
+
+    useEffect(() => {
+        axios.get('/get_profile/brunoscorza@hotmail.com').then((response) => {
+            setProfile(response.data);
+            console.log(response)
+        })
+    }, [])
+
     return (
         <div className="Profile">
             <div className="Profile-text d-flex flex-column h-100 justify-content-center text-center">
                 <img className="mx-auto d-block w-75 bg-primary img-fluid rounded-circle mb-4 p-3" src={process.env.PUBLIC_URL +"/img/profile.jpeg"} alt="" />
-                <h1 className="font-weight-bold">Bruno Scorzafave</h1>
+                <h1 className="font-weight-bold">{ profile.firstname } { profile.lastname }</h1>
                 <p className="mb-4">
-                Justo stet no accusam stet invidunt sanctus magna clita vero eirmod, sit sit labore dolores lorem. Lorem at sit dolor dolores sed diam justo
+                    { profile.aboutme }
                 </p>
                 <div className="d-flex justify-content-center mb-5">
                     <a className="btn btn-outline-primary me-2" target="_blank" rel="noreferrer" href="https://www.linkedin.com/in/bruno-scorzafave/"><FontAwesomeIcon icon={brands('linkedin')} /></a>

@@ -5,11 +5,13 @@ import stytch
 import json
 
 from flask import Flask, render_template, request, make_response, redirect
+from flask_cors import CORS
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from flask_ckeditor import CKEditor
 from Classes.User import User
 from Classes.BlogPost import BlogPost
+
 from Classes.Forms import RegisterOrLoginForm, EditUserForm, CreateOrUpdatePostForm
 # TODO: remove this import
 from stytch.consumer.models.users import Name
@@ -57,6 +59,7 @@ app = Flask(__name__)
 app.secret_key = os.getenv("APP_SECRET_KEY")
 
 ckeditor = CKEditor(app)
+CORS(app)
 
 
 @app.route("/", methods=['GET'])
@@ -276,6 +279,14 @@ def get_posts():
     recorded_user = user_collection.find_one(filter_email)
 
     return json.dumps(recorded_user['posts'], default=str)
+
+
+@app.route("/get_profile/<user_email>")
+def get_profile(user_email):
+    filter_email = {"email": user_email}
+    recorded_user = user_collection.find_one(filter_email, {'posts': False})
+
+    return json.dumps(recorded_user, default=str)
 
 
 if __name__ == "__main__":
