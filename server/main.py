@@ -173,8 +173,8 @@ def profile():
     return render_template('home/profile.html', current_user=recorded_user, form=edit_user_form)
 
 
-@app.route("/post/<type>/<post_id>", methods=["GET", "POST"])
-def post(type, post_id):
+@app.route("/post/<operation>/<post_id>", methods=["GET", "POST"])
+def post(operation, post_id):
     try:
         user_id = request.cookies.get('userID')
         user_resp = stytch_client.users.get(
@@ -191,6 +191,7 @@ def post(type, post_id):
     user_email = user_resp.emails[0].__dict__['email']
     filter_email = {"email": user_email}
     recorded_user = user_collection.find_one(filter_email)
+
     if 'save_post' in request.form:
         if post_id in recorded_user['posts']:
             post = recorded_user['posts'][str(post_id)]
@@ -212,23 +213,23 @@ def post(type, post_id):
                 content=request.form['content']
             )
             user_collection.update_one(filter_email, {'$set': post_class.dict()})
-            user_collection.update_one(filter_email, {'$set': {'posts.qty': int(recorded_user['posts']['qty']) + 1}})
-            user_collection.update_one(filter_email, {'$set': {'posts.last_indexed': int(recorded_user['posts']['last_indexed']) + 1}})
+            user_collection.update_one(filter_email, {'$inc': {'posts.qty': 1}})
+            user_collection.update_one(filter_email, {'$inc': {'posts.last_indexed': 1}})
 
     recorded_user = user_collection.find_one(filter_email)
-    if type == 'delete':
+    if operation == 'delete':
         user_collection.update_one(filter_email, {'$unset': {f'posts.{post_id}': ''}})
         user_collection.update_one(filter_email, {'$set': {'posts.qty': int(recorded_user['posts']['qty']) - 1}})
         return redirect('/posts')
     create_post_form = CreateOrUpdatePostForm()
-    if type == 'update':
+    if operation == 'update':
         post = recorded_user['posts'][str(post_id)]
         create_post_form.title.data = post['title']
         create_post_form.description.data = post['description']
         create_post_form.slug.data = post['slug']
         create_post_form.content.data = post['content']
 
-    return render_template('home/create_or_update_post.html', form=create_post_form, type=type, post_id=post_id)
+    return render_template('home/create_or_update_post.html', form=create_post_form, operation=operation, post_id=post_id)
 
 
 @app.route("/posts")

@@ -35,7 +35,7 @@
             </div>
           </div>
           <div class="card-body">
-            <form role="form" method="post" action="{{ url_for('post', type='update', post_id=post_id) }}">
+            <form role="form" method="post" action="{{ url_for('post', operation='update', post_id=post_id) }}">
 
               {{ form.hidden_tag() }}
 
