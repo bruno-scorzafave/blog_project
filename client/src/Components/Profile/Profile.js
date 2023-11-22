@@ -13,7 +13,6 @@ function Profile() {
     useEffect(() => {
         axios.get('/get_profile/brunoscorza@hotmail.com').then((response) => {
             setProfile(response.data);
-            console.log(response)
         })
     }, [])
 

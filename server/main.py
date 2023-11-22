@@ -259,22 +259,8 @@ def posts():
     return render_template('home/posts.html', posts=posts, posts_last_indexed=posts_last_indexed)
 
 
-@app.route("/get_posts")
-def get_posts():
-    try:
-        user_id = request.cookies.get('userID')
-        user_resp = stytch_client.users.get(
-            user_id=user_id
-        )
-    except Exception as e:
-        user_resp = None
-        print(e)
-
-    if user_resp is None or user_resp.status_code != 200:
-        print(user_resp)
-        return redirect('/')
-
-    user_email = user_resp.emails[0].__dict__['email']
+@app.route("/get_posts/<user_email>")
+def get_posts(user_email):
     filter_email = {"email": user_email}
     recorded_user = user_collection.find_one(filter_email)
 

@@ -9,6 +9,7 @@ import AboutMe from '../AboutMe/AboutMe';
 import Contact from "../Contact/Contact";
 import BlogGrid from "../BlogGrid/BlogGrid";
 import PostDetail from "../PostDetail/PostDetail";
+import BlogPosts from '../BlogPosts/BlogPosts'
 
 import './BlogContent.scss';
 
@@ -21,9 +22,7 @@ function BlogContent() {
         <div className="BlogContent">
           <Navbar activeBar={0} />
           <BlogCarousel />
-          <BlogPost post={{title: "First Post"}} />
-          <Newsletter />
-          <BlogPost post={{title: "Second Post"}}/>
+          <BlogPosts />
           <Copyright />
         </div>
       </Route>
