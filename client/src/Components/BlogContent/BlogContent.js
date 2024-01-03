@@ -50,7 +50,7 @@ function BlogContent() {
       <Route path='/post/:title'>
         <div className="BlogContent">
           <Navbar />
-          <PostDetail post={params} />
+          <PostDetail params={params} />
           <Copyright />
         </div>
       </Route>

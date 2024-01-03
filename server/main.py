@@ -9,6 +9,7 @@ from flask_cors import CORS
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from flask_ckeditor import CKEditor
+
 from Classes.User import User
 from Classes.BlogPost import BlogPost
 
@@ -265,6 +266,15 @@ def get_posts(user_email):
     recorded_user = user_collection.find_one(filter_email)
 
     return json.dumps(recorded_user['posts'], default=str)
+
+
+@app.route("/get_post/<user_email>/<post_title>")
+def get_post(user_email, post_title):
+    filter_email = {"email": user_email}
+    recorded_user = user_collection.find_one(filter_email)
+    for index, post in recorded_user['posts'].items():
+        if index.isnumeric() and post['title'] == post_title:
+            return json.dumps(post, default=str)
 
 
 @app.route("/get_profile/<user_email>")
