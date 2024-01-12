@@ -12,6 +12,7 @@ from flask_ckeditor import CKEditor
 
 from Classes.User import User
 from Classes.BlogPost import BlogPost
+from Classes.Comment import Comment
 
 from Classes.Forms import RegisterOrLoginForm, EditUserForm, CreateOrUpdatePostForm
 # TODO: remove this import
@@ -283,6 +284,13 @@ def get_profile(user_email):
     recorded_user = user_collection.find_one(filter_email, {'posts': False})
 
     return json.dumps(recorded_user, default=str)
+
+
+@app.route("/insert/comment", methods=["POST"])
+def comment():
+    print(request.get_json()['message'])
+
+    return 200
 
 
 if __name__ == "__main__":

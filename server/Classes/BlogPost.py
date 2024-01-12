@@ -2,7 +2,9 @@ from datetime import datetime
 
 
 class BlogPost:
-    def __init__(self, id, title, description, slug, content, created_at=datetime.now(), updated_at=datetime.now()):
+    def __init__(
+            self, id, title, description, slug, content, created_at=datetime.now(), updated_at=datetime.now()
+    ):
         self.id = id
         self.title = title
         self.description = description
