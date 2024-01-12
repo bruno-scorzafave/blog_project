@@ -17,18 +17,19 @@ function PostDetail({params}) {
         })
     }, [])
 
-    console.log(post)
+    const post_id = Object.keys(post)[0] || 0
 
     return (
         <>
-        <PageHeader title={decodeURI(post.title)} />
+        <PageHeader title={decodeURI(post[post_id] ? post[post_id].title : 'title')} />
         <div className="container py-5 px-2 bg-white">
             <div className="row px-4">
+                <PostIcons tag={'p'} created_at={post[post_id] ? post[post_id].created_at : ''} slug={post[post_id] ? post[post_id].slug: ''}/>
                 <div id='content' className="col-12">
-                    { post.content && parse(post.content) }
+                    { post[post_id] ? parse(post[post_id].content) : '' }
                 </div>
                 <hr />
-                <Comments />
+                <Comments post_id={post_id}/>
             </div>
         </div>
         </>

@@ -2,18 +2,26 @@ import React, { useEffect, useState} from 'react';
 
 import axios from '../../axios';
 
-function Comments() {
+function Comments({post_id}) {
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [message, setMessage] = useState("")
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
   
-        await axios.post('/insert/comment', {
+        axios.post('/insert/comment', {
+            post_id: post_id,
             name: name,
             email:email,
             message:message
+        }).then((response) => {
+            console.log('response', response)
+            if (response.data.success == true){
+                window.location.reload()
+            }
+        }).catch((error) => {
+            console.log('error', error)
         })
     }
 

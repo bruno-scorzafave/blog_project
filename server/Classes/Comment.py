@@ -4,11 +4,3 @@ class Comment:
         self.name = name
         self.email = email
         self.message = message
-
-    def dict(self):
-        return {
-            'post_id': self.post_id,
-            'name': self.name,
-            'email': self.email,
-            'message': self.message
-        }

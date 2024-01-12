@@ -31,6 +31,7 @@ client = MongoClient(uri, server_api=ServerApi('1'))
 try:
     db = client['blog_project']
     user_collection = db['users']
+    comment_collection = db['comments']
 
     print("You successfully connected to MongoDB!")
 except Exception as e:
@@ -275,7 +276,7 @@ def get_post(user_email, post_title):
     recorded_user = user_collection.find_one(filter_email)
     for index, post in recorded_user['posts'].items():
         if index.isnumeric() and post['title'] == post_title:
-            return json.dumps(post, default=str)
+            return json.dumps({index: post}, default=str)
 
 
 @app.route("/get_profile/<user_email>")
@@ -288,9 +289,17 @@ def get_profile(user_email):
 
 @app.route("/insert/comment", methods=["POST"])
 def comment():
-    print(request.get_json()['message'])
+    request_json = request.get_json()
+    comment_class = Comment(
+        post_id=request_json['post_id'],
+        name=request_json['name'],
+        email=request_json['email'],
+        message=request_json['message']
+    )
 
-    return 200
+    comment_collection.insert_one(comment_class.__dict__)
+
+    return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
 
 if __name__ == "__main__":

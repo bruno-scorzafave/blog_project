@@ -6,8 +6,10 @@ function PostIcons({tag, created_at, slug}) {
     const formattedDate = created_at.slice(0,10);
     const words = slug.split(' ');
 
-    for (let i = 0; i < words.length; i++) {
-        words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+    if (words.length > 1) {
+        for (let i = 0; i < words.length; i++) {
+            words[i] = words[i][0].toUpperCase() + words[i].substr(1);
+        }
     }
     const formattedSlug = words.join(" ");
     
