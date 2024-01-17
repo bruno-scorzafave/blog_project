@@ -302,5 +302,16 @@ def comment():
     return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
 
+@app.route("/get_comments/<post_id>")
+def get_comments(post_id):
+    filter_post = {"post_id": post_id}
+    recorded_comments = comment_collection.find(filter_post)
+    comment_array = []
+    for comment in recorded_comments:
+        comment_array.append(comment)
+
+    return json.dumps(comment_array, default=str)
+
+
 if __name__ == "__main__":
     app.run(host=HOST, port=PORT, debug=True)
