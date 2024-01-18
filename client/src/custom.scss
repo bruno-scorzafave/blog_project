@@ -1,0 +1,32 @@
+// Override default variables before the import
+$primary: #2A4B7C;
+$secondary: #202C45;
+$gray: #6c757d;
+$gray-dark: #343a40;
+$primary: #2A4B7C;
+$enable-rounded: false;
+$small-font-size: 80%;
+$link-decoration: none;
+$headings-color: $secondary;
+$navbar-padding-x: 1rem;
+$carousel-caption-width: 100%;
+$carousel-caption-spacer: 0;
+$carousel-caption-padding-y: 0;
+
+small,
+.small {
+  font-weight: 400;
+}
+
+.font-weight-bold {
+  font-weight: 700;
+}
+
+.carousel-caption {
+  top: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+// Import Bootstrap and its default variables
+@import '~bootstrap/scss/bootstrap.scss';

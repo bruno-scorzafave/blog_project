@@ -1,0 +1,70 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Profile {% endblock title %}
+
+{% block content %}
+
+  <div class="header bg-primary pb-6">
+      <div class="container-fluid">
+        <div class="header-body">
+          <div class="row align-items-center py-4">
+            <div class="col-12">
+              <h6 class="h2 text-white d-inline-block mb-0">Post List</h6>
+              <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
+                <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
+                  <li class="breadcrumb-item"><a href="/dashboard"><i class="fas fa-home"></i></a></li>
+                  <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Post List</li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+    <div class="container-fluid mt--6">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <div class="row align-items-center">
+              <div class="col-9 col-lg-10">
+                <h3 class="mb-0">Post List</h3>
+              </div>
+              <div class="col-3 col-lg-2">
+                <button type="button" class="btn btn-primary float-right" onclick="window.location.href='{{ url_for( 'post', operation='create', post_id=posts_last_indexed|int + 1) }}';">Create Post</button>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            {% for key, dict in posts.items() %}
+              {% if key == 'qty' or key == 'last_indexed' %}
+              {% else %}
+              <div class="column border rounded border-primary p-4 mb-4">
+                <div class="row">
+                  <h1 class="col-8">{{ dict['title'] }}</h1>
+                  <div class="col-4">
+                    <button type="button" class="btn btn-danger float-right" onclick="window.location.href='{{ url_for( 'post', operation='delete', post_id=key ) }}';"><i class="fas fa-trash-alt"></i></button>
+                    <button type="button" class="btn btn-primary float-right mr-2" onclick="window.location.href='{{ url_for( 'post', operation='update', post_id=key ) }}';">Edit</button>
+                  </div>
+                </div>
+                <hr>
+                <p>Description: {{ dict['description'] }}</p>
+                <p>Slug: {{ dict['slug'] }}</p>
+                <p>Created at: {{ dict['created_at'].strftime('%Y-%m-%d %H:%m') }}</p>
+                <p>Updated at: {{ dict['updated_at'].strftime('%Y-%m-%d %H:%m') }}</p>
+              </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% include "includes/footer.html" %}
+
+  </div>
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}{% endblock javascripts %}

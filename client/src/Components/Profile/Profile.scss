@@ -1,0 +1,62 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+
+.Profile {
+    display: flex;
+    z-index: 99;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    width: 100%;
+    float: left;
+    padding: 30px;
+    background: #ffffff;
+    -webkit-transition: margin 200ms ease-out, width 1s ease-out;
+    -moz-transition: margin 200ms ease-out, width 1s ease-out;
+    -o-transition: margin 200ms ease-out, width 1s ease-out;
+    transition: margin 200ms ease-out, width 1s ease-out;
+
+    h1 {
+        font-weight: 700;
+    }
+
+    & &-icon {
+        display: none !important;
+    }
+
+    img {
+        max-height: 200px;
+    }
+
+    @include media-breakpoint-only(md) {
+        margin-left: -350px;
+        
+        &:hover {
+            margin: 0 !important;
+        }
+
+        &:hover &-icon {
+            display: none !important;
+        }
+
+        & &-icon {
+            position: fixed;
+            display: flex !important;
+            left: 0px;
+            background: white;
+            width: 60px;
+        }
+    }
+
+    @include media-breakpoint-up(md) {
+        position: fixed;
+        height: 100%;
+        width: 350px;
+    }
+
+    @include media-breakpoint-up(lg) {
+        float: left;
+    }
+}
