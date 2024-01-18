@@ -8,6 +8,8 @@ Blog Project: A project presenting some of my skills in web development
 * HTML5
 * Scss
 * Bootstrap 
+* Stytch
+* MongoDB
 * Argon dashboard (https://github.com/app-generator/flask-argon-dashboard)
 * Bloggy template (https://www.free-css.com/free-css-templates/page276/bloggy)
 
