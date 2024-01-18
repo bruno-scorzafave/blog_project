@@ -45,7 +45,7 @@ function Comments({post_id}) {
                             // update date to "01 Jan 2045 at 12:00pm" format
                             // add reply
                             <>
-                                <h4>{comment.name} <small><i>{comment.created_at}</i></small></h4>
+                                <h4>{comment.name} <small><i>{comment.created_at.slice(0,10) + ' at ' + comment.created_at.slice(10,16)}</i></small></h4>
                                 <p>{comment.message}</p>
                             </>
                     ))}

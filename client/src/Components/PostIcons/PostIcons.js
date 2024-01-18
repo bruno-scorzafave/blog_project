@@ -17,7 +17,6 @@ function PostIcons({tag, created_at, slug}) {
         <div className="d-flex">
             <CustomTag className="me-3 mb-3 text-muted"><FontAwesomeIcon icon={solid('calendar-days')} /> {formattedDate}</CustomTag>
             <CustomTag className="me-3 mb-3 text-muted"><FontAwesomeIcon icon={solid('folder')} /> {formattedSlug}</CustomTag>
-            <CustomTag className="me-3 mb-3 text-muted"><FontAwesomeIcon icon={solid('comments')} /> 0 Comments</CustomTag>
         </div>
     );
 }

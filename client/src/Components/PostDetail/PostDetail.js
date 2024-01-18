@@ -24,12 +24,16 @@ function PostDetail({params}) {
         <PageHeader title={decodeURI(post[post_id] ? post[post_id].title : 'title')} />
         <div className="container py-5 px-2 bg-white">
             <div className="row px-4">
-                <PostIcons tag={'p'} created_at={post[post_id] ? post[post_id].created_at : ''} slug={post[post_id] ? post[post_id].slug: ''}/>
-                <div id='content' className="col-12">
-                    { post[post_id] ? parse(post[post_id].content) : '' }
-                </div>
-                <hr />
-                <Comments post_id={post_id}/>
+                { post[post_id] &&
+                    <>
+                        <PostIcons tag={'p'} created_at={ post[post_id].created_at } slug={ post[post_id].slug }/>
+                        <div id='content' className="col-12">
+                            { parse(post[post_id].content) }
+                        </div>
+                        <hr />
+                        <Comments post_id={post_id}/>
+                    </>
+                }
             </div>
         </div>
         </>
